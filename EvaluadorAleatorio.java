@@ -1,3 +1,4 @@
+
 /*
  * EvaluadorAleatorio.java
  *
@@ -7,21 +8,22 @@ import java.util.Random;
 
 /**
  *
- * @author  ribadas
+ * @author ribadas
  */
 public class EvaluadorAleatorio extends Evaluador {
-    /* Ejemplo de evaluador "de jugete"
+    /*
+     * Ejemplo de evaluador "de jugete"
      * Simplemente devuelve un valor aleatorio entre
-     *  "-infinito" y "+infifito"
+     * "-infinito" y "+infifito"
      */
-   
+
     private Random generador = new Random();
-    
+
     /** Creates a new instance of EvaluadorAleatorio */
     public EvaluadorAleatorio() {
     }
-    
+
     public int valoracion(Tablero tablero, int jugador) {
-        return(generador.nextInt(MAXIMO+Math.abs(MINIMO)) - Math.abs(MINIMO));
+        return (generador.nextInt(MAXIMO + Math.abs(MINIMO)) - Math.abs(MINIMO));
     }
 }
