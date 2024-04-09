@@ -128,6 +128,7 @@ public class EstrategiaAlphaBeta extends Estrategia {
                     nuevoTablero = null; // Ya no se necesita
                 }
             }
+        }
         return (valor);
     }
 
