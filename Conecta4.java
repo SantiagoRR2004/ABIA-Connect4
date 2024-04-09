@@ -31,8 +31,8 @@ public class Conecta4 {
 
         // Jugador 2: jugador minimax con evaluador aleatorio y prof. busqueda 4
         Jugador jugador2 = new Jugador(2);
-        jugador2.establecerEstrategia(new EstrategiaMiniMax(new EvaluadorAleatorio(), 4));
-        DEBUG("Jugador 2: maquina (minimax con eval. aleatorio + prof. 4)\n");
+        jugador2.establecerEstrategia(new EstrategiaAlphaBeta(new EvaluadorAleatorio(), 4));
+        DEBUG("Jugador 2: maquina (alphabeta con eval. aleatorio + prof. 4)\n");
 
         // Jugar
         Tablero tablero = new Tablero();
