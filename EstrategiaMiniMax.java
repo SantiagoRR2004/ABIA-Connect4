@@ -7,11 +7,11 @@ public class EstrategiaMiniMax extends Estrategia {
      * "establecerEvaluador()" y "establecerCapaMaxima()"
      */
 
-    private Evaluador _evaluador;
-    private int _capaMaxima;
+    protected Evaluador _evaluador;
+    protected int _capaMaxima;
 
-    private int _jugadorMAX; // - guarda el identificador del jugador
-                             // que hace el papel de MAX
+    protected int _jugadorMAX; // - guarda el identificador del jugador
+                               // que hace el papel de MAX
     // - necesario al hacer las evaluaciones
     // de posiciones finales (ganador, perdedor, empate)
     // en el caso base de la recursividad del MINIMAX
@@ -49,7 +49,7 @@ public class EstrategiaMiniMax extends Estrategia {
                 nuevoTablero.obtenerGanador();
 
                 // evaluarlo (OJO: cambiar jugador, establecer capa a 1)
-                valorSucesor = MINIMAX(nuevoTablero, Jugador.alternarJugador(jugador), 1);
+                valorSucesor = Estrategia(nuevoTablero, Jugador.alternarJugador(jugador), 1);
                 nuevoTablero = null; // Ya no se necesita
 
                 // tomar mejor valor
@@ -60,6 +60,10 @@ public class EstrategiaMiniMax extends Estrategia {
             }
         }
         return (mejorPosicion);
+    }
+
+    protected int Estrategia(Tablero tablero, int jugador, int capa) {
+        return MINIMAX(tablero, jugador, capa);
     }
 
     public int MINIMAX(Tablero tablero, int jugador, int capa) {
@@ -123,22 +127,22 @@ public class EstrategiaMiniMax extends Estrategia {
         _evaluador = evaluador;
     }
 
-    private static final boolean esCapaMIN(int capa) {
+    protected static final boolean esCapaMIN(int capa) {
         return ((capa % 2) == 1); // es impar
     }
 
-    private static final boolean esCapaMAX(int capa) {
+    protected static final boolean esCapaMAX(int capa) {
         return ((capa % 2) == 0); // es par
     }
 
-    private static final int maximo2(int v1, int v2) {
+    protected static final int maximo2(int v1, int v2) {
         if (v1 > v2)
             return (v1);
         else
             return (v2);
     }
 
-    private static final int minimo2(int v1, int v2) {
+    protected static final int minimo2(int v1, int v2) {
         if (v1 < v2)
             return (v1);
         else

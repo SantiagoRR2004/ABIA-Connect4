@@ -1,4 +1,4 @@
-public class EstrategiaAlphaBeta extends Estrategia {
+public class EstrategiaAlphaBeta extends EstrategiaMiniMax {
     /*
      * Estrategia que implementa una busqueda AlphaBeta
      * 
@@ -7,59 +7,18 @@ public class EstrategiaAlphaBeta extends Estrategia {
      * "establecerEvaluador()" y "establecerCapaMaxima()"
      */
 
-    private Evaluador _evaluador;
-    private int _capaMaxima;
-
-    private int _jugadorMAX; // - guarda el identificador del jugador
-                             // que hace el papel de MAX
-    // - necesario al hacer las evaluaciones
-    // de posiciones finales (ganador, perdedor, empate)
-    // en el caso base de la recursividad del AlphaBeta
-
     /** Creates a new instance of EstrategiaAlphaBeta */
     public EstrategiaAlphaBeta() {
+        super();
     }
 
     public EstrategiaAlphaBeta(Evaluador evaluador, int capaMaxima) {
-        this.establecerEvaluador(evaluador);
-        this.establecerCapaMaxima(capaMaxima);
+        super(evaluador, capaMaxima);
     }
 
-    public int buscarMovimiento(Tablero tablero, int jugador) {
-        // Implementa primera capa del AlphaBeta + seleccion jugada mas prometedora
-        //
-        //
-        // capa O -> capa MAX -> maximiza
-        // devuelve la columna con mayor evaluacion
-
-        boolean movimientosPosibles[] = tablero.columnasLibres();
-        Tablero nuevoTablero;
-        int col, valorSucesor;
-        int mejorPosicion = -1; // Movimiento nulo
-        int mejorValor = _evaluador.MINIMO; // Minimo valor posible
-
-        _jugadorMAX = jugador; // - anota el identificador del jugador que
-                               // tiene el papel de MAX
-                               // - necesario para evaluar posiciones finales
-        for (col = 0; col < Tablero.NCOLUMNAS; col++) {
-            if (movimientosPosibles[col]) { // se puede añadir ficha en columna
-                // crear nuevo tablero y comprobar ganador
-                nuevoTablero = (Tablero) tablero.clone();
-                nuevoTablero.anadirFicha(col, jugador);
-                nuevoTablero.obtenerGanador();
-
-                // evaluarlo (OJO: cambiar jugador, establecer capa a 1)
-                valorSucesor = AlphaBeta(nuevoTablero, _evaluador.MINIMO, _evaluador.MAXIMO, Jugador.alternarJugador(jugador), 1);
-                nuevoTablero = null; // Ya no se necesita
-
-                // tomar mejor valor
-                if (valorSucesor >= mejorValor) {
-                    mejorValor = valorSucesor;
-                    mejorPosicion = col;
-                }
-            }
-        }
-        return (mejorPosicion);
+    @Override
+    protected int Estrategia(Tablero tablero, int jugador, int capa) {
+        return AlphaBeta(tablero, _evaluador.MINIMO, _evaluador.MAXIMO, jugador, capa);
     }
 
     public int AlphaBeta(Tablero tablero, int alpha, int beta, int jugador, int capa) {
@@ -92,75 +51,47 @@ public class EstrategiaAlphaBeta extends Estrategia {
         if (esCapaMIN(capa)) {
             int betaActual = beta;
             aux = 20000;
-            
+
             for (col = 0; col < Tablero.NCOLUMNAS; col++) {
                 if (movimientosPosibles[col]) { // se puede añadir ficha en columna
                     // crear nuevo tablero y comprobar ganador
-                    if(betaActual <= alpha){
-                        break;  //poda alpha
+                    if (betaActual <= alpha) {
+                        break; // poda alpha
                     }
                     nuevoTablero = (Tablero) tablero.clone();
                     nuevoTablero.anadirFicha(col, jugador);
                     nuevoTablero.obtenerGanador();
 
                     // evaluarlo (OJO: cambiar jugador e incrementar capa)
-                    aux = minimo2(aux, AlphaBeta(nuevoTablero, alpha, beta, Jugador.alternarJugador(jugador), (capa + 1)));
+                    aux = minimo2(aux,
+                            AlphaBeta(nuevoTablero, alpha, beta, Jugador.alternarJugador(jugador), (capa + 1)));
                     betaActual = minimo2(betaActual, aux);
                     nuevoTablero = null; // Ya no se necesita
                 }
             }
-            
+
         } else {
             int alphaActual = alpha;
             aux = -20000;
             for (col = 0; col < Tablero.NCOLUMNAS; col++) {
                 if (movimientosPosibles[col]) { // se puede añadir ficha en columna
                     // crear nuevo tablero y comprobar ganador
-                    if(alphaActual >= beta){
-                        break;  //poda beta
+                    if (alphaActual >= beta) {
+                        break; // poda beta
                     }
                     nuevoTablero = (Tablero) tablero.clone();
                     nuevoTablero.anadirFicha(col, jugador);
                     nuevoTablero.obtenerGanador();
 
                     // evaluarlo (OJO: cambiar jugador e incrementar capa)
-                    aux = maximo2(aux, AlphaBeta(nuevoTablero, alpha, beta, Jugador.alternarJugador(jugador), (capa + 1)));
+                    aux = maximo2(aux,
+                            AlphaBeta(nuevoTablero, alpha, beta, Jugador.alternarJugador(jugador), (capa + 1)));
                     alphaActual = maximo2(alphaActual, aux);
                     nuevoTablero = null; // Ya no se necesita
                 }
-            } 
+            }
         }
         return (aux);
-    }
-
-    public void establecerCapaMaxima(int capaMaxima) {
-        _capaMaxima = capaMaxima;
-    }
-
-    public void establecerEvaluador(Evaluador evaluador) {
-        _evaluador = evaluador;
-    }
-
-    private static final boolean esCapaMIN(int capa) {
-        return ((capa % 2) == 1); // es impar
-    }
-
-    private static final boolean esCapaMAX(int capa) {
-        return ((capa % 2) == 0); // es par
-    }
-
-    private static final int maximo2(int v1, int v2) {
-        if (v1 > v2)
-            return (v1);
-        else
-            return (v2);
-    }
-
-    private static final int minimo2(int v1, int v2) {
-        if (v1 < v2)
-            return (v1);
-        else
-            return (v2);
     }
 
 } // Fin clase EstrategiaAlphaBeta
