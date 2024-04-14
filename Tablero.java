@@ -69,7 +69,7 @@ public class Tablero {
          * Aquí obligamos a que si el tablero es simétrico
          * solo se pueda jugar en la mitad de la tabla
          * izquierda
-        */
+         */
         if (simetricoVertical()) {
             for (col = 0; col < (NCOLUMNAS % 2 == 0 ? NCOLUMNAS / 2 : NCOLUMNAS / 2 + 1); col++) {
                 result[col] = (_posicionLibre[col] < NFILAS);
@@ -79,7 +79,7 @@ public class Tablero {
                 result[col] = (_posicionLibre[col] < NFILAS);
             }
         }
-        
+
         return (result);
     }
 
@@ -300,7 +300,7 @@ public class Tablero {
         return (true); // Si llega todas las casillas son iguales
     }
 
-    public int heuristicaSimetrica() {
+    public int heuristicaSimetrica(int jugador) {
         /*
          * Esta función es una heurística bastante mala
          * Devuelve 1 si el tablero es simétrico
@@ -315,7 +315,6 @@ public class Tablero {
 
 } // Fin clase Tablero
 
-
 interface MyFunctionalInterface {
-    int execute(Tablero heuristica);
+    int execute(Tablero heuristica, int jugador);
 }

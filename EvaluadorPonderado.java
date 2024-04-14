@@ -30,7 +30,7 @@ public class EvaluadorPonderado extends Evaluador {
             ERROR("Error: EvaluadorPonderado no inicializado\n");
         } else {
             for (int i = 0; i < _funciones.length; i++) {
-                valoracion += _pesos[i] * _funciones[i].execute(tablero);
+                valoracion += _pesos[i] * _funciones[i].execute(tablero, jugador);
             }
         }
         return valoracion;
@@ -41,5 +41,3 @@ public class EvaluadorPonderado extends Evaluador {
     }
 
 }
-
-
