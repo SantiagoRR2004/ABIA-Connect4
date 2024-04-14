@@ -288,6 +288,11 @@ public class Tablero {
     ///////////////////////////////////////////////////////////////////////////////////////
     // Aquí añadimos lo nuevo
 
+    public int otherPlayer(int jugador) {
+        return Jugador.alternarJugador(jugador);
+        // return (jugador == JUGADOR1 ? JUGADOR2 : JUGADOR1);
+    }
+
     public boolean simetricoVertical() {
         int col, fila;
         for (col = 0; col < NCOLUMNAS / 2; col++) {
@@ -311,6 +316,89 @@ public class Tablero {
         } else {
             return 0;
         }
+    }
+
+    public int heuristicaPotentialWin(int jugador) {
+        /*
+         * Es una heurística muy buena
+         * Por cada línea de NOBJETIVO fichas del jugador
+         * no bloqueada por el otro jugador, suma 1
+         * por cada ficha del jugador en la línea
+         */
+        int total = 0;
+
+        // First the horizontal lines
+        for (int fila = 0; fila < (NFILAS - NOBJETIVO); fila++) {
+            for (int col = 0; col < NCOLUMNAS; col++) {
+                int pieces = 0;
+                for (int pos = 0; pos < NOBJETIVO; pos++) {
+                    if (_casillas[col][fila + pos] == jugador) {
+                        pieces++;
+                    } else if (_casillas[col][fila + pos] == otherPlayer(jugador)) {
+                        pieces = 0;
+                        break;
+                    }
+                }
+                total += pieces;
+            }
+        }
+
+        // Now the vertical lines
+        for (int col = 0; col < (NCOLUMNAS - NOBJETIVO); col++) {
+            for (int fila = 0; fila < NFILAS; fila++) {
+                int pieces = 0;
+                for (int pos = 0; pos < NOBJETIVO; pos++) {
+                    if (_casillas[col + pos][fila] == jugador) {
+                        pieces++;
+                    } else if (_casillas[col + pos][fila] == otherPlayer(jugador)) {
+                        pieces = 0;
+                        break;
+                    }
+                }
+                total += pieces;
+            }
+        }
+
+        // Now the diagonal lines from bottom-left to top-right
+        for (int col = 0; col < (NCOLUMNAS - NOBJETIVO); col++) {
+            for (int fila = 0; fila < (NFILAS - NOBJETIVO); fila++) {
+                int pieces = 0;
+                for (int pos = 0; pos < NOBJETIVO; pos++) {
+                    if (_casillas[col + pos][fila + pos] == jugador) {
+                        pieces++;
+                    } else if (_casillas[col + pos][fila + pos] == otherPlayer(jugador)) {
+                        pieces = 0;
+                        break;
+                    }
+                }
+                total += pieces;
+            }
+        }
+
+        // Now the diagonal lines from top-left to bottom-right
+        for (int col = 0; col < (NCOLUMNAS - NOBJETIVO); col++) {
+            for (int fila = NOBJETIVO - 1; fila < NFILAS; fila++) {
+                int pieces = 0;
+                for (int pos = 0; pos < NOBJETIVO; pos++) {
+                    if (_casillas[col + pos][fila - pos] == jugador) {
+                        pieces++;
+                    } else if (_casillas[col + pos][fila - pos] == otherPlayer(jugador)) {
+                        pieces = 0;
+                        break;
+                    }
+                }
+                total += pieces;
+            }
+        }
+        return total;
+    }
+
+    public int heuristicaPotentialLoss(int opponent) {
+        /*
+         * Lo mismo que heuristicaPotentialWin pero para el oponente
+         * por eso le pasamos el oponente a heuristicaPotentialWin
+         */
+        return heuristicaPotentialWin(otherPlayer(opponent));
     }
 
 } // Fin clase Tablero
