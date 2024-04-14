@@ -65,9 +65,21 @@ public class Tablero {
         boolean[] result = new boolean[NCOLUMNAS];
         int col;
 
-        for (col = 0; col < NCOLUMNAS; col++) {
-            result[col] = (_posicionLibre[col] < NFILAS);
+        /*
+         * Aquí obligamos a que si el tablero es simétrico
+         * solo se pueda jugar en la mitad de la tabla
+         * izquierda
+        */
+        if (simetricoVertical()) {
+            for (col = 0; col < (NCOLUMNAS % 2 == 0 ? NCOLUMNAS / 2 : NCOLUMNAS / 2 + 1); col++) {
+                result[col] = (_posicionLibre[col] < NFILAS);
+            }
+        } else {
+            for (col = 0; col < NCOLUMNAS; col++) {
+                result[col] = (_posicionLibre[col] < NFILAS);
+            }
         }
+        
         return (result);
     }
 
@@ -271,6 +283,34 @@ public class Tablero {
 
     public boolean esGanador(int jugador) {
         return (jugador == _ganador);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // Aquí añadimos lo nuevo
+
+    public boolean simetricoVertical() {
+        int col, fila;
+        for (col = 0; col < NCOLUMNAS / 2; col++) {
+            for (fila = 0; fila < NFILAS; fila++) {
+                if (this._casillas[col][fila] != this._casillas[NCOLUMNAS - 1 - col][fila]) {
+                    return (false); // Son distintos -> salir devolviendo falso
+                }
+            }
+        }
+        return (true); // Si llega todas las casillas son iguales
+    }
+
+    public int heuristicaSimetrica() {
+        /*
+         * Esta función es una heurística bastante mala
+         * Devuelve 1 si el tablero es simétrico
+         * o 0 en caso contrario
+         */
+        if (simetricoVertical()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
 } // Fin clase Tablero
