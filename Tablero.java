@@ -314,3 +314,8 @@ public class Tablero {
     }
 
 } // Fin clase Tablero
+
+
+interface MyFunctionalInterface {
+    int execute(Tablero heuristica);
+}
