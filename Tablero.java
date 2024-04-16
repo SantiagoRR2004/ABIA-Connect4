@@ -21,6 +21,12 @@ public class Tablero {
     private int[] _posicionLibre;
     private int _ganador = EMPATE;
 
+    private static final double NORMALIZADORPOTENCIAL = (NCOLUMNAS >= NOBJETIVO
+            ? (2 * NOBJETIVO - 1 <= NCOLUMNAS ? 2 * NOBJETIVO - 1 : NCOLUMNAS)
+            : 0)
+            + (NFILAS >= NOBJETIVO ? (2 * NOBJETIVO - 1 <= NCOLUMNAS ? 2 : (NCOLUMNAS >= NOBJETIVO ? 1 : 0)) + 1 : 0);
+    
+
     /** Creates a new instance of Tablero */
     public Tablero() {
         this._casillas = new int[NCOLUMNAS][NFILAS];
@@ -318,7 +324,7 @@ public class Tablero {
         }
     }
 
-    public int heuristicaPotentialWin(int jugador) {
+    public double heuristicaPotentialWin(int jugador) {
         /*
          * Es una heurística muy buena
          * Por cada línea de NOBJETIVO fichas del jugador
@@ -390,10 +396,19 @@ public class Tablero {
                 total += pieces;
             }
         }
-        return total;
+
+        // Ahora normalizamos el valor como podemos
+        // Lo hacemos diviendo por el número de líneas posibles
+        // colocando la primera ficha de todas
+
+        // Esto es todas las horizontales a bajo nivel
+        // Una vertical
+        // Dos diagonales si es posible
+
+        return total/NORMALIZADORPOTENCIAL;
     }
 
-    public int heuristicaPotentialLoss(int opponent) {
+    public double heuristicaPotentialLoss(int opponent) {
         /*
          * Lo mismo que heuristicaPotentialWin pero para el oponente
          * por eso le pasamos el oponente a heuristicaPotentialWin
@@ -404,5 +419,5 @@ public class Tablero {
 } // Fin clase Tablero
 
 interface MyFunctionalInterface {
-    int execute(Tablero heuristica, int jugador);
+    double execute(Tablero heuristica, int jugador);
 }

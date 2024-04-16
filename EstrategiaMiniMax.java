@@ -34,9 +34,10 @@ public class EstrategiaMiniMax extends Estrategia {
 
         boolean movimientosPosibles[] = tablero.columnasLibres();
         Tablero nuevoTablero;
-        int col, valorSucesor;
+        int col;
+        double valorSucesor;
         int mejorPosicion = -1; // Movimiento nulo
-        int mejorValor = _evaluador.MINIMO; // Minimo valor posible
+        double mejorValor = _evaluador.MINIMO; // Minimo valor posible
 
         _jugadorMAX = jugador; // - anota el identificador del jugador que
                                // tiene el papel de MAX
@@ -62,11 +63,11 @@ public class EstrategiaMiniMax extends Estrategia {
         return (mejorPosicion);
     }
 
-    protected int Estrategia(Tablero tablero, int jugador, int capa) {
+    protected double Estrategia(Tablero tablero, int jugador, int capa) {
         return MINIMAX(tablero, jugador, capa);
     }
 
-    public int MINIMAX(Tablero tablero, int jugador, int capa) {
+    public double MINIMAX(Tablero tablero, int jugador, int capa) {
         // Implementa la propagación de valores MINIMAX propiamente dicha
         // a partir del segundo nivel (capa 1)
 
@@ -91,7 +92,8 @@ public class EstrategiaMiniMax extends Estrategia {
         // Recursividad sobre los sucesores
         boolean movimientosPosibles[] = tablero.columnasLibres();
         Tablero nuevoTablero;
-        int col, valor, valorSucesor;
+        int col;
+        double valorSucesor, valor;
 
         if (esCapaMIN(capa)) {
             valor = _evaluador.MAXIMO; // valor máximo
@@ -135,14 +137,14 @@ public class EstrategiaMiniMax extends Estrategia {
         return ((capa % 2) == 0); // es par
     }
 
-    protected static final int maximo2(int v1, int v2) {
+    protected static final double maximo2(double v1, double v2) {
         if (v1 > v2)
             return (v1);
         else
             return (v2);
     }
 
-    protected static final int minimo2(int v1, int v2) {
+    protected static final double minimo2(double v1, double v2) {
         if (v1 < v2)
             return (v1);
         else

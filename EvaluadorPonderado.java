@@ -24,8 +24,8 @@ public class EvaluadorPonderado extends Evaluador {
         }
     }
 
-    public int valoracion(Tablero tablero, int jugador) {
-        int valoracion = 0;
+    public double valoracion(Tablero tablero, int jugador) {
+        double valoracion = 0;
         if (!_setUp) {
             ERROR("Error: EvaluadorPonderado no inicializado\n");
         } else {

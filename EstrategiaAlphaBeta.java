@@ -17,11 +17,11 @@ public class EstrategiaAlphaBeta extends EstrategiaMiniMax {
     }
 
     @Override
-    protected int Estrategia(Tablero tablero, int jugador, int capa) {
+    protected double Estrategia(Tablero tablero, int jugador, int capa) {
         return AlphaBeta(tablero, _evaluador.MINIMO, _evaluador.MAXIMO, jugador, capa);
     }
 
-    public int AlphaBeta(Tablero tablero, int alpha, int beta, int jugador, int capa) {
+    public double AlphaBeta(Tablero tablero, int alpha, int beta, int jugador, int capa) {
         // Implementa la propagación de valores AlphaBeta propiamente dicha
         // a partir del segundo nivel (capa 1)
 
@@ -46,11 +46,12 @@ public class EstrategiaAlphaBeta extends EstrategiaMiniMax {
         // Recursividad sobre los sucesores
         boolean movimientosPosibles[] = tablero.columnasLibres();
         Tablero nuevoTablero;
-        int col, aux;
+        int col;
+        double aux;
 
         if (esCapaMIN(capa)) {
-            int betaActual = beta;
-            aux = 20000;
+            double betaActual = beta;
+            aux = _evaluador.MAXIMO;
 
             for (col = 0; col < Tablero.NCOLUMNAS; col++) {
                 if (movimientosPosibles[col]) { // se puede añadir ficha en columna
@@ -71,8 +72,8 @@ public class EstrategiaAlphaBeta extends EstrategiaMiniMax {
             }
 
         } else {
-            int alphaActual = alpha;
-            aux = -20000;
+            double alphaActual = alpha;
+            aux = _evaluador.MINIMO;
             for (col = 0; col < Tablero.NCOLUMNAS; col++) {
                 if (movimientosPosibles[col]) { // se puede añadir ficha en columna
                     // crear nuevo tablero y comprobar ganador
