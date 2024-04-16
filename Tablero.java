@@ -25,7 +25,6 @@ public class Tablero {
             ? (2 * NOBJETIVO - 1 <= NCOLUMNAS ? 2 * NOBJETIVO - 1 : NCOLUMNAS)
             : 0)
             + (NFILAS >= NOBJETIVO ? (2 * NOBJETIVO - 1 <= NCOLUMNAS ? 2 : (NCOLUMNAS >= NOBJETIVO ? 1 : 0)) + 1 : 0);
-    
 
     /** Creates a new instance of Tablero */
     public Tablero() {
@@ -405,7 +404,7 @@ public class Tablero {
         // Una vertical
         // Dos diagonales si es posible
 
-        return total/NORMALIZADORPOTENCIAL;
+        return total / NORMALIZADORPOTENCIAL;
     }
 
     public double heuristicaPotentialLoss(int opponent) {
@@ -414,6 +413,55 @@ public class Tablero {
          * por eso le pasamos el oponente a heuristicaPotentialWin
          */
         return heuristicaPotentialWin(otherPlayer(opponent));
+    }
+
+    public double heuristicaCentral(int jugador) {
+        /*
+         * Esta heurística cuenta que las columnas centrales sean las más altas
+         * Si una columna extrema es menor o igual que la central se suma 1
+         * lo contrario se resta 1
+         */
+        double total = 0;
+
+        // Primera mitad
+        for (int col = 0; col < Math.ceil(NCOLUMNAS / 2.0) - 1; col++) {
+            if (_posicionLibre[col] <= _posicionLibre[col + 1]) {
+                total += 1;
+            } else {
+                total -= 1;
+            }
+        }
+
+        for (int col = (int) Math.ceil(NCOLUMNAS / 2.0); col < NCOLUMNAS - 1; col++) {
+            if (_posicionLibre[col] >= _posicionLibre[col + 1]) {
+                total += 1;
+            } else {
+                total -= 1;
+            }
+        }
+        // Normalizamos entre -1 y 1
+        // entre el número de huecos
+        return total / (NCOLUMNAS - 1);
+    }
+
+    public double heuristicaVerticalidad(int jugador) {
+        /*
+         * Queremos que los tableros sean lo menos verticales posibles
+         * Para eso empezamos en el total y vamos restando por la altura de la columna
+         * Es una suma geométrica. La primera ficha vale 1, la segunda 2, la tercera
+         * 3...
+         * Y tenemos que ir sumando todas y después restamos.
+         */
+        // https://es.wikipedia.org/wiki/Progresi%C3%B3n_aritm%C3%A9tica
+        double total = NCOLUMNAS * NFILAS * (NFILAS + 1) / 2;
+
+        for (int col = 0; col < NCOLUMNAS; col++) {
+            total -= _posicionLibre[col] * (_posicionLibre[col] + 1) / 2;
+        }
+
+        // Normalizamos entre 0 y 1
+        return total / (NCOLUMNAS * NFILAS * (NFILAS + 1) / 2);
+
     }
 
 } // Fin clase Tablero
