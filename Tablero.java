@@ -26,6 +26,9 @@ public class Tablero {
             : 0)
             + (NFILAS >= NOBJETIVO ? (2 * NOBJETIVO - 1 <= NCOLUMNAS ? 2 : (NCOLUMNAS >= NOBJETIVO ? 1 : 0)) + 1 : 0);
 
+    static final MyFunctionalInterface[] HEURISTICAS = { Tablero::heuristicaSimetrica, Tablero::heuristicaPotentialWin,
+            Tablero::heuristicaPotentialLoss, Tablero::heuristicaCentral, Tablero::heuristicaVerticalidad };
+
     /** Creates a new instance of Tablero */
     public Tablero() {
         this._casillas = new int[NCOLUMNAS][NFILAS];
@@ -407,12 +410,12 @@ public class Tablero {
         return total / NORMALIZADORPOTENCIAL;
     }
 
-    public double heuristicaPotentialLoss(int opponent) {
+    public double heuristicaPotentialLoss(int jugador) {
         /*
          * Lo mismo que heuristicaPotentialWin pero para el oponente
          * por eso le pasamos el oponente a heuristicaPotentialWin
          */
-        return heuristicaPotentialWin(otherPlayer(opponent));
+        return heuristicaPotentialWin(otherPlayer(jugador));
     }
 
     public double heuristicaCentral(int jugador) {
