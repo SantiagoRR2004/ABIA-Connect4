@@ -1,16 +1,17 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Training {
 
     int max = 10;
     int min = -10;
-    float step = 0.1f;
+    float step = 1f;
 
     String filename = "pesos.txt";
 
-    int totalTrains = 100;
+    int totalTrains = 1000;
 
-    int numberOfGames = 10;
+    int numberOfGames = 3;
     int capaMaxima = 4;
 
     Random random = new Random();
@@ -48,13 +49,14 @@ public class Training {
 
     public float[] changePesos(float[] pesos) {
 
+        float[] newPesos = Arrays.copyOf(pesos, pesos.length);
         int randomIndex = random.nextInt(pesos.length);
         int upOrDown = (random.nextInt(2) == 0) ? -1 : 1; // -1 or 1
 
         if (min <= pesos[randomIndex] + step * upOrDown && pesos[randomIndex] + step * upOrDown <= max) {
-            pesos[randomIndex] = pesos[randomIndex] + step * upOrDown;
+            newPesos[randomIndex] = pesos[randomIndex] + step * upOrDown;
         }
-        return pesos;
+        return newPesos;
     }
 
     public int[] playGames(float[] pesos, float[] newPesos) {
@@ -108,7 +110,7 @@ public class Training {
             firstNew = !firstNew;
         }
 
-        System.out.println("Wins: " + wins + " Draws: " + draws + " Loses: " + loses);
+        System.out.println("Wins: " + wins + "\t\tDraws: " + draws + "\t\tLoses: " + loses);
         return new int[] { wins, loses, draws };
     }
 
