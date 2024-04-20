@@ -2,7 +2,7 @@ public class EvaluadorPonderado extends Evaluador {
     /*
      */
 
-    private int[] _pesos;
+    private float[] _pesos;
     private MyFunctionalInterface[] _funciones;
     private boolean _setUp = false;
 
@@ -10,11 +10,11 @@ public class EvaluadorPonderado extends Evaluador {
     public EvaluadorPonderado() {
     }
 
-    public EvaluadorPonderado(int[] pesos, MyFunctionalInterface[] funciones) {
+    public EvaluadorPonderado(float[] pesos, MyFunctionalInterface[] funciones) {
         inicializar(pesos, funciones);
     }
 
-    public void inicializar(int[] pesos, MyFunctionalInterface[] funciones) {
+    public void inicializar(float[] pesos, MyFunctionalInterface[] funciones) {
         if (pesos.length == funciones.length) {
             this._pesos = pesos;
             this._funciones = funciones;
