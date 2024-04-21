@@ -9,9 +9,9 @@ public class Training {
 
     String filename = "pesos.txt";
 
-    int totalTrains = 1000;
+    int totalTrains = 10000;
 
-    int numberOfGames = 3;
+    int numberOfGames = 2;
     int capaMaxima = 4;
 
     Random random = new Random();
@@ -32,9 +32,19 @@ public class Training {
             float[] newPesos = changePesos(pesos);
             int[] stats = playGames(pesos, newPesos);
 
+            System.out.println("Wins: " + stats[0] + "\t\tDraws: " + stats[1] + "\tLoses: " +
+                    stats[2]);
+
+            int[] stats2 = playGames(newPesos, pesos);
+
+            if (stats[0] != stats2[2] || stats[1] != stats2[1] || stats[2] != stats2[0]) {
+                System.out.println("Error: The operation is not reversable.");
+            }
+
             if (newerBetter(stats[0], stats[1], stats[2])) {
                 Archivo.guardarPesos(filename, newPesos);
-                pesos = newPesos;
+                pesos = Arrays.copyOf(newPesos, newPesos.length);
+                System.out.println("New weights saved.");
             }
         }
     }
@@ -92,29 +102,20 @@ public class Training {
 
             if (tablero.hayEmpate()) {
                 draws++;
-            } else if (firstNew) {
-                if (tablero.ganaJ1()) {
-                    wins++;
-                } else {
-                    loses++;
-                }
-            } else {
-                if (tablero.ganaJ2()) {
-                    wins++;
-                } else {
-                    loses++;
-                }
+            } else if (tablero.ganaJ1()) {
+                loses++;
+            } else if (tablero.ganaJ2()) {
+                wins++;
             }
 
             // Cambiar el primer jugador
             firstNew = !firstNew;
         }
 
-        System.out.println("Wins: " + wins + "\t\tDraws: " + draws + "\t\tLoses: " + loses);
-        return new int[] { wins, loses, draws };
+        return new int[] { wins, draws, loses };
     }
 
-    public boolean newerBetter(int wins, int loses, int draws) {
+    public boolean newerBetter(int wins, int draws, int loses) {
         /*
          * Simplemente comprobamos que haya ganado más partidas que las que ha perdido.
          * Los empates no cuentan para esta métrica.
