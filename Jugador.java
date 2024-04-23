@@ -33,6 +33,16 @@ public class Jugador {
         return (_identificador);
     }
 
+    public long[] getMetricas() {
+        long[] metricas = new long[3];
+        metricas[0] = _estrategia.Nnodos;
+        metricas[1] = _estrategia.Nmovs;
+        metricas[2] = _estrategia.tiempoSum;
+        _estrategia.resetMetricas(); 
+        return metricas;
+        
+    }
+
     public static final int alternarJugador(int jugadorActual) {
         return (((jugadorActual % 2) + 1)); // Alterna entre jugador 1 y 2
     }

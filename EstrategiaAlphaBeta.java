@@ -24,7 +24,7 @@ public class EstrategiaAlphaBeta extends EstrategiaMiniMax {
     public double AlphaBeta(Tablero tablero, int alpha, int beta, int jugador, int capa) {
         // Implementa la propagación de valores AlphaBeta propiamente dicha
         // a partir del segundo nivel (capa 1)
-
+        Nnodos ++;
         // Casos base
         if (tablero.hayEmpate()) {
             return (0);

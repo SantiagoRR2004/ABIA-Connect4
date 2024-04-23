@@ -50,6 +50,10 @@ public class Conecta4 {
         if (tablero.ganaJ2()) {
             System.out.println("RESULTADO: Gana jugador 2");
         }
+        long[] metricas = jugador2.getMetricas();
+        for (int i = 0; i <3; i++){
+            System.out.println(metricas[i]);
+        }
         System.exit(1);
     }
 

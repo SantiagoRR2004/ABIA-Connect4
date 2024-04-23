@@ -31,7 +31,8 @@ public class EstrategiaMiniMax extends Estrategia {
         //
         // capa O -> capa MAX -> maximiza
         // devuelve la columna con mayor evaluacion
-
+        Nmovs ++;
+        long startTime = System.currentTimeMillis();
         boolean movimientosPosibles[] = tablero.columnasLibres();
         Tablero nuevoTablero;
         int col;
@@ -60,6 +61,7 @@ public class EstrategiaMiniMax extends Estrategia {
                 }
             }
         }
+        tiempoSum += (System.currentTimeMillis()-startTime); 
         return (mejorPosicion);
     }
 
@@ -70,7 +72,7 @@ public class EstrategiaMiniMax extends Estrategia {
     public double MINIMAX(Tablero tablero, int jugador, int capa) {
         // Implementa la propagación de valores MINIMAX propiamente dicha
         // a partir del segundo nivel (capa 1)
-
+        Nnodos ++;
         // Casos base
         if (tablero.hayEmpate()) {
             return (0);
