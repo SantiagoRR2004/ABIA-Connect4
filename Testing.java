@@ -1,5 +1,7 @@
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
 
 public class Testing {
     static Random random = new Random();
@@ -26,9 +28,11 @@ public class Testing {
 
     static int[] listOfDepth = { 1, 2, 3, 4, 5 };
 
+    static int maxThreads = Runtime.getRuntime().availableProcessors();
+
     public static void main(String[] args) {
         testDepth();
-
+        testMiniMaxVSAlphaBeta();
     }
 
     public static void testDepth() {
@@ -37,12 +41,16 @@ public class Testing {
         Jugador jugadorRandom = new Jugador(1);
         Jugador oponente = new Jugador(2);
 
+        int[] threadsByType = divideNumber(Testing.maxThreads, 3);
+
         for (int depth : listOfDepth) {
             AtomicInteger wins1 = new AtomicInteger(0), draws1 = new AtomicInteger(0), loses1 = new AtomicInteger(0),
                     wins2 = new AtomicInteger(0), draws2 = new AtomicInteger(0), loses2 = new AtomicInteger(0),
                     wins3 = new AtomicInteger(0), draws3 = new AtomicInteger(0), loses3 = new AtomicInteger(0);
             AtomicInteger time1 = new AtomicInteger(0), time2 = new AtomicInteger(0), time3 = new AtomicInteger(0);
             AtomicInteger nodes1 = new AtomicInteger(0), nodes2 = new AtomicInteger(0), nodes3 = new AtomicInteger(0);
+
+            List<Thread> threadList = new ArrayList<Thread>(Testing.maxThreads);
 
             jugadoPesos1.establecerEstrategia(
                     new EstrategiaAlphaBeta(new EvaluadorPonderado(pesos1, _heuristicas1), depth));
@@ -51,35 +59,111 @@ public class Testing {
             jugadorRandom.establecerEstrategia(new EstrategiaAlphaBeta(new EvaluadorAleatorio(), depth));
             oponente.establecerEstrategia(new EstrategiaAlphaBeta(new EvaluadorAleatorio(), depth));
 
-            GameSimulationThread thread1 = new GameSimulationThread(jugadoPesos1, oponente, numberOfGames, draws1,
-                    wins1, loses1, time1, nodes1);
-            GameSimulationThread thread2 = new GameSimulationThread(jugadorPesos2, oponente, numberOfGames, draws2,
-                    wins2, loses2, time2, nodes2);
-            GameSimulationThread thread3 = new GameSimulationThread(jugadorRandom, oponente, numberOfGames, draws3,
-                    wins3, loses3, time3, nodes3);
-
-            thread1.start();
-            thread2.start();
-            thread3.start();
-
-            try {
-                thread1.join();
-                thread2.join();
-                thread3.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            for (int j : divideNumber(numberOfGames, threadsByType[0])) {
+                threadList.add(new GameSimulationThread(jugadoPesos1, oponente, j, draws1, wins1, loses1,
+                        time1, nodes1));
+            }
+            for (int j : divideNumber(numberOfGames, threadsByType[1])) {
+                threadList.add(new GameSimulationThread(jugadorPesos2, oponente, j, draws2, wins2, loses2,
+                        time2, nodes2));
+            }
+            for (int j : divideNumber(numberOfGames, threadsByType[2])) {
+                threadList.add(new GameSimulationThread(jugadorRandom, oponente, j, draws3, wins3, loses3,
+                        time3, nodes3));
             }
 
-            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth, "Poderado1",
-                    wins1.get(), draws1.get(), loses1.get(), time1.get()/numberOfGames, nodes1.get()/numberOfGames);
-            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth, "Poderado2",
-                    wins2.get(), draws2.get(), loses2.get(), time2.get()/numberOfGames, nodes2.get()/numberOfGames);
-            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth, "Random",
-                    wins3.get(), draws3.get(), loses3.get(), time3.get()/numberOfGames, nodes3.get()/numberOfGames);
+            for (Thread t : threadList) {
+                t.start();
+            }
+
+            for (Thread t : threadList) {
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
+                    "Poderado1",
+                    wins1.get(), draws1.get(), loses1.get(), time1.get() / numberOfGames, nodes1.get() / numberOfGames);
+            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
+                    "Poderado2",
+                    wins2.get(), draws2.get(), loses2.get(), time2.get() / numberOfGames, nodes2.get() / numberOfGames);
+            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
+                    "Random",
+                    wins3.get(), draws3.get(), loses3.get(), time3.get() / numberOfGames, nodes3.get() / numberOfGames);
         }
     }
 
-    public void testMiniMaxVSAlphaBeta() {
+    public static void testMiniMaxVSAlphaBeta() {
 
+        Jugador jugadorMM = new Jugador(1);
+        Jugador jugadorAB = new Jugador(1);
+        Jugador oponente = new Jugador(2);
+
+        int[] threadsByType = divideNumber(Testing.maxThreads, 2);
+
+        for (int depth : listOfDepth) {
+
+            AtomicInteger wins1 = new AtomicInteger(0), draws1 = new AtomicInteger(0), loses1 = new AtomicInteger(0),
+                    wins2 = new AtomicInteger(0), draws2 = new AtomicInteger(0), loses2 = new AtomicInteger(0);
+            AtomicInteger time1 = new AtomicInteger(0), time2 = new AtomicInteger(0);
+            AtomicInteger nodes1 = new AtomicInteger(0), nodes2 = new AtomicInteger(0);
+
+            List<Thread> threadList = new ArrayList<Thread>(Testing.maxThreads);
+
+            jugadorMM.establecerEstrategia(
+                    new EstrategiaMiniMax(new EvaluadorPonderado(pesos1, _heuristicas1), depth));
+            jugadorAB.establecerEstrategia(
+                    new EstrategiaAlphaBeta(new EvaluadorPonderado(pesos1, _heuristicas1), depth));
+            oponente.establecerEstrategia(new EstrategiaAlphaBeta(new EvaluadorAleatorio(), depth));
+
+            for (int j : divideNumber(numberOfGames, threadsByType[0])) {
+                threadList.add(new GameSimulationThread(jugadorMM, oponente, j, draws1, wins1, loses1,
+                        time1, nodes1));
+            }
+            for (int j : divideNumber(numberOfGames, threadsByType[1])) {
+                threadList.add(new GameSimulationThread(jugadorAB, oponente, j, draws2, wins2, loses2,
+                        time2, nodes2));
+            }
+
+            for (Thread t : threadList) {
+                t.start();
+            }
+
+            for (Thread t : threadList) {
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
+                    "MiniMax",
+                    wins1.get(), draws1.get(), loses1.get(), time1.get() / numberOfGames, nodes1.get() / numberOfGames);
+            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
+                    "AlphaBeta",
+                    wins2.get(), draws2.get(), loses2.get(), time2.get() / numberOfGames, nodes2.get() / numberOfGames);
+        }
     }
+
+    public static int[] divideNumber(int number, int divisor) {
+        int[] result = new int[divisor];
+        int quotient = number / divisor;
+        int remainder = number % divisor;
+
+        // Assigning quotient to each integer
+        for (int i = 0; i < divisor; i++) {
+            result[i] = quotient;
+        }
+
+        // Distributing remainder among the integers
+        for (int i = 0; i < remainder; i++) {
+            result[i]++;
+        }
+
+        return result;
+    }
+
 }
