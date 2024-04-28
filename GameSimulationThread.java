@@ -11,13 +11,14 @@ public class GameSimulationThread extends Thread {
 
     private final AtomicInteger time;
     private final AtomicInteger nodes;
+    private final AtomicInteger nMovs;
 
     private final Jugador player1;
     private final Jugador player2;
     private final int numberOfGames;
 
     public GameSimulationThread(Jugador player1, Jugador player2, int numberOfGames, AtomicInteger draws,
-            AtomicInteger wins, AtomicInteger loses, AtomicInteger time, AtomicInteger nodes) {
+            AtomicInteger wins, AtomicInteger loses, AtomicInteger time, AtomicInteger nodes, AtomicInteger nMovs) {
         this.player1 = player1;
         this.player2 = player2;
         this.numberOfGames = numberOfGames;
@@ -26,6 +27,7 @@ public class GameSimulationThread extends Thread {
         this.loses = loses;
         this.time = time;
         this.nodes = nodes;
+        this.nMovs = nMovs;
     }
 
     @Override
@@ -55,6 +57,7 @@ public class GameSimulationThread extends Thread {
 
         long[] metricas = player1.getMetricas();
         time.addAndGet((int) metricas[2]);
+        nMovs.addAndGet((int) metricas[1]);
         nodes.addAndGet((int) metricas[0]);
     }
 }
