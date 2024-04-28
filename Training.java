@@ -3,9 +3,9 @@ import java.util.Random;
 
 public class Training {
 
-    int max = 10;
-    int min = -10;
-    float step = 1f;
+    int max = 1;
+    int min = -1;
+    float step = 0.1f;
 
     String filename = "pesos.txt";
 
