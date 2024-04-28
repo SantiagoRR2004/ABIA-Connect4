@@ -7,7 +7,7 @@ public class Testing {
     static Random random = new Random();
 
     static String filename1 = "pesos.txt";
-    static String filename2 = "pesos.txt";
+    static String filename2 = "pesosTentativos.txt";
 
     static float[] pesos1 = Archivo.obtenerPesos(filename1);
     static float[] pesos2 = Archivo.obtenerPesos(filename2);
@@ -49,6 +49,7 @@ public class Testing {
                     wins3 = new AtomicInteger(0), draws3 = new AtomicInteger(0), loses3 = new AtomicInteger(0);
             AtomicInteger time1 = new AtomicInteger(0), time2 = new AtomicInteger(0), time3 = new AtomicInteger(0);
             AtomicInteger nodes1 = new AtomicInteger(0), nodes2 = new AtomicInteger(0), nodes3 = new AtomicInteger(0);
+            AtomicInteger nMovs1 = new AtomicInteger(0), nMovs2 = new AtomicInteger(0), nMovs3 = new AtomicInteger(0);
 
             List<Thread> threadList = new ArrayList<Thread>(Testing.maxThreads);
 
@@ -61,15 +62,15 @@ public class Testing {
 
             for (int j : divideNumber(numberOfGames, threadsByType[0])) {
                 threadList.add(new GameSimulationThread(jugadoPesos1, oponente, j, draws1, wins1, loses1,
-                        time1, nodes1));
+                        time1, nodes1, nMovs1));
             }
             for (int j : divideNumber(numberOfGames, threadsByType[1])) {
                 threadList.add(new GameSimulationThread(jugadorPesos2, oponente, j, draws2, wins2, loses2,
-                        time2, nodes2));
+                        time2, nodes2, nMovs2));
             }
             for (int j : divideNumber(numberOfGames, threadsByType[2])) {
                 threadList.add(new GameSimulationThread(jugadorRandom, oponente, j, draws3, wins3, loses3,
-                        time3, nodes3));
+                        time3, nodes3, nMovs3));
             }
 
             for (Thread t : threadList) {
@@ -84,15 +85,10 @@ public class Testing {
                 }
             }
 
-            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
-                    "Poderado1",
-                    wins1.get(), draws1.get(), loses1.get(), time1.get() / numberOfGames, nodes1.get() / numberOfGames);
-            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
-                    "Poderado2",
-                    wins2.get(), draws2.get(), loses2.get(), time2.get() / numberOfGames, nodes2.get() / numberOfGames);
-            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
-                    "Random",
-                    wins3.get(), draws3.get(), loses3.get(), time3.get() / numberOfGames, nodes3.get() / numberOfGames);
+            showResults(depth, filename1, wins1, draws1, loses1, time1, nodes1, nMovs1);
+            showResults(depth, filename2, wins2, draws2, loses2, time2, nodes2, nMovs2);
+            showResults(depth, "Random", wins3, draws3, loses3, time3, nodes3, nMovs3);
+
         }
     }
 
@@ -110,6 +106,7 @@ public class Testing {
                     wins2 = new AtomicInteger(0), draws2 = new AtomicInteger(0), loses2 = new AtomicInteger(0);
             AtomicInteger time1 = new AtomicInteger(0), time2 = new AtomicInteger(0);
             AtomicInteger nodes1 = new AtomicInteger(0), nodes2 = new AtomicInteger(0);
+            AtomicInteger nMovs1 = new AtomicInteger(0), nMovs2 = new AtomicInteger(0);
 
             List<Thread> threadList = new ArrayList<Thread>(Testing.maxThreads);
 
@@ -121,11 +118,11 @@ public class Testing {
 
             for (int j : divideNumber(numberOfGames, threadsByType[0])) {
                 threadList.add(new GameSimulationThread(jugadorMM, oponente, j, draws1, wins1, loses1,
-                        time1, nodes1));
+                        time1, nodes1, nMovs1));
             }
             for (int j : divideNumber(numberOfGames, threadsByType[1])) {
                 threadList.add(new GameSimulationThread(jugadorAB, oponente, j, draws2, wins2, loses2,
-                        time2, nodes2));
+                        time2, nodes2, nMovs2));
             }
 
             for (Thread t : threadList) {
@@ -139,12 +136,9 @@ public class Testing {
                     e.printStackTrace();
                 }
             }
-            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
-                    "MiniMax",
-                    wins1.get(), draws1.get(), loses1.get(), time1.get() / numberOfGames, nodes1.get() / numberOfGames);
-            System.out.printf("Depth: %-2d %-10s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Nodes: %d\n", depth,
-                    "AlphaBeta",
-                    wins2.get(), draws2.get(), loses2.get(), time2.get() / numberOfGames, nodes2.get() / numberOfGames);
+
+            showResults(depth,"MiniMax", wins1, draws1, loses1, time1, nodes1, nMovs1);
+            showResults(depth,"AlphaBeta", wins2, draws2, loses2, time2, nodes2, nMovs2);
         }
     }
 
@@ -164,6 +158,13 @@ public class Testing {
         }
 
         return result;
+    }
+
+    public static void showResults(int depth, String name, AtomicInteger wins, AtomicInteger draws, AtomicInteger loses,
+            AtomicInteger time, AtomicInteger nodes, AtomicInteger nMovs) {
+        System.out.printf("Depth: %-2d %-20s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Moves: %-10d Nodes: %d\n", depth,
+                name,
+                wins.get(), draws.get(), loses.get(), time.get(), nMovs.get(), nodes.get());
     }
 
 }
