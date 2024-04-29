@@ -31,7 +31,7 @@ public class Conecta4 {
 
         // Jugador 2: jugador minimax con evaluador aleatorio y prof. busqueda 4
         Jugador jugador2 = new Jugador(2);
-        jugador2.establecerEstrategia(new EstrategiaAlphaBeta(new EvaluadorAleatorio(), 4));
+        jugador2.establecerEstrategia(new EstrategiaAlphaBeta(new EvaluadorPonderado(pesos1,funciones), 4));
         DEBUG("Jugador 2: maquina (alphabeta con eval. aleatorio + prof. 4)\n");
 
         // Jugar
@@ -61,7 +61,7 @@ public class Conecta4 {
         // procesar parametros de linea de comandos
     }
 
-    private static void jugar(Jugador jugador1, Jugador jugador2, Tablero tablero) {
+    public static void jugar(Jugador jugador1, Jugador jugador2, Tablero tablero) {
         int turno = 0;
         Jugador jugadorActual;
         int movimiento;

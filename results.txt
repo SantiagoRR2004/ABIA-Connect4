@@ -1,0 +1,15 @@
+Depth: 1  pesos.txt            Wins: 797 Draws: 0   Loses: 203 Time: 2275       Moves: 5382       Nodes: 35084
+Depth: 1  pesosTentativos.txt  Wins: 866 Draws: 0   Loses: 134 Time: 2141       Moves: 5551       Nodes: 35873
+Depth: 1  Random               Wins: 513 Draws: 0   Loses: 487 Time: 1427       Moves: 6903       Nodes: 45887
+Depth: 2  pesos.txt            Wins: 784 Draws: 26  Loses: 190 Time: 18166      Moves: 13972      Nodes: 548461
+Depth: 2  pesosTentativos.txt  Wins: 761 Draws: 21  Loses: 218 Time: 18679      Moves: 13639      Nodes: 531089
+Depth: 2  Random               Wins: 451 Draws: 103 Loses: 446 Time: 15793      Moves: 14757      Nodes: 611756
+Depth: 3  pesos.txt            Wins: 845 Draws: 4   Loses: 151 Time: 111696     Moves: 13732      Nodes: 2953669
+Depth: 3  pesosTentativos.txt  Wins: 860 Draws: 6   Loses: 134 Time: 114172     Moves: 13850      Nodes: 2918490
+Depth: 3  Random               Wins: 469 Draws: 64  Loses: 467 Time: 93145      Moves: 13757      Nodes: 3278444
+Depth: 1  MiniMax              Wins: 810 Draws: 0   Loses: 190 Time: 7952       Moves: 5300       Nodes: 35914
+Depth: 1  AlphaBeta            Wins: 798 Draws: 0   Loses: 202 Time: 7149       Moves: 5365       Nodes: 35942
+Depth: 2  MiniMax              Wins: 770 Draws: 18  Loses: 212 Time: 14905      Moves: 14056      Nodes: 572810
+Depth: 2  AlphaBeta            Wins: 782 Draws: 29  Loses: 189 Time: 14466      Moves: 14025      Nodes: 552938
+Depth: 3  MiniMax              Wins: 853 Draws: 9   Loses: 138 Time: 123732     Moves: 13965      Nodes: 3482559
+Depth: 3  AlphaBeta            Wins: 865 Draws: 7   Loses: 128 Time: 110608     Moves: 13955      Nodes: 3013566
