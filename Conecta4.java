@@ -31,8 +31,9 @@ public class Conecta4 {
 
         // Jugador 2: jugador minimax con evaluador aleatorio y prof. busqueda 4
         Jugador jugador2 = new Jugador(2);
-        jugador2.establecerEstrategia(new EstrategiaAlphaBeta(new EvaluadorPonderado(pesos1,funciones), 4));
-        DEBUG("Jugador 2: maquina (alphabeta con eval. aleatorio + prof. 4)\n");
+        jugador2.establecerEstrategia(new EstrategiaAlphaBeta(
+                new EvaluadorPonderado(Archivo.obtenerPesos("pesosTentativos.txt"), Tablero.HEURISTICAS), 4));
+        DEBUG("Jugador 2: maquina (alphabeta con eval. ponderado + prof. 4)\n");
 
         // Jugar
         Tablero tablero = new Tablero();
@@ -51,7 +52,7 @@ public class Conecta4 {
             System.out.println("RESULTADO: Gana jugador 2");
         }
         long[] metricas = jugador2.getMetricas();
-        for (int i = 0; i <3; i++){
+        for (int i = 0; i < 3; i++) {
             System.out.println(metricas[i]);
         }
         System.exit(1);
