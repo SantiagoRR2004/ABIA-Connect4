@@ -33,6 +33,7 @@ public class Testing {
     public static void main(String[] args) {
         testDepth();
         testMiniMaxVSAlphaBeta();
+        test2weighted();
     }
 
     public static void testDepth() {
@@ -137,8 +138,8 @@ public class Testing {
                 }
             }
 
-            showResults(depth,"MiniMax", wins1, draws1, loses1, time1, nodes1, nMovs1);
-            showResults(depth,"AlphaBeta", wins2, draws2, loses2, time2, nodes2, nMovs2);
+            showResults(depth, "MiniMax", wins1, draws1, loses1, time1, nodes1, nMovs1);
+            showResults(depth, "AlphaBeta", wins2, draws2, loses2, time2, nodes2, nMovs2);
         }
     }
 
@@ -162,9 +163,57 @@ public class Testing {
 
     public static void showResults(int depth, String name, AtomicInteger wins, AtomicInteger draws, AtomicInteger loses,
             AtomicInteger time, AtomicInteger nodes, AtomicInteger nMovs) {
-        System.out.printf("Depth: %-2d %-20s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Moves: %-10d Nodes: %d\n", depth,
+        System.out.printf("Depth: %-2d %-20s Wins: %-3d Draws: %-3d Loses: %-3d Time: %-10d Moves: %-10d Nodes: %d\n",
+                depth,
                 name,
                 wins.get(), draws.get(), loses.get(), time.get(), nMovs.get(), nodes.get());
+    }
+
+    public static void test2weighted() {
+        Jugador jugadorPesos1 = new Jugador(1);
+        Jugador jugadorPesos2 = new Jugador(2);
+
+        for (int depth : listOfDepth) {
+
+            jugadorPesos1.establecerEstrategia(
+                    new EstrategiaAlphaBeta(new EvaluadorPonderado(pesos1, _heuristicas1), depth));
+            jugadorPesos2.establecerEstrategia(
+                    new EstrategiaAlphaBeta(new EvaluadorPonderado(pesos2, _heuristicas2), depth));
+
+            Tablero tablero = new Tablero();
+            tablero.inicializar();
+
+            Conecta4.jugar(jugadorPesos1, jugadorPesos2, tablero);
+
+            String winner = "";
+
+            if (tablero.hayEmpate()) {
+                winner = "Empate";
+            } else if (tablero.ganaJ1()) {
+                winner = filename1;
+            } else if (tablero.ganaJ2()) {
+                winner = filename2;
+            }
+
+            System.out.printf("Depth: %-2d Starts: %-20s Wins: %-20s\n", depth, filename1, winner);
+
+            tablero.inicializar();
+
+            Conecta4.jugar(jugadorPesos2, jugadorPesos1, tablero);
+
+            winner = "";
+
+            if (tablero.hayEmpate()) {
+                winner = "Empate";
+            } else if (tablero.ganaJ1()) {
+                winner = filename1;
+            } else if (tablero.ganaJ2()) {
+                winner = filename2;
+            }
+
+            System.out.printf("Depth: %-2d Starts: %-20s Wins: %-20s\n", depth, filename2, winner);
+
+        }
     }
 
 }
