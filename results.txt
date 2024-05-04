@@ -638,3 +638,21 @@ Depth: 6  pesosTentativos.txt  Wins: 9   Draws: 0   Loses: 1   Time: 240999     
 Depth: 6  Random               Wins: 3   Draws: 0   Loses: 7   Time: 225031     Moves: 171        Nodes: 7596620
 Depth: 6  MiniMax              Wins: 8   Draws: 0   Loses: 2   Time: 153946     Moves: 166        Nodes: 8776699
 Depth: 6  AlphaBeta            Wins: 6   Draws: 0   Loses: 4   Time: 135789     Moves: 170        Nodes: 7078180
+Depth: 1  Starts: pesos.txt            Wins: pesosTentativos.txt 
+Depth: 1  Starts: pesosTentativos.txt  Wins: pesosTentativos.txt 
+Depth: 2  Starts: pesos.txt            Wins: pesosTentativos.txt 
+Depth: 2  Starts: pesosTentativos.txt  Wins: pesosTentativos.txt 
+Depth: 3  Starts: pesos.txt            Wins: pesos.txt           
+Depth: 3  Starts: pesosTentativos.txt  Wins: pesosTentativos.txt 
+Depth: 4  Starts: pesos.txt            Wins: pesosTentativos.txt 
+Depth: 4  Starts: pesosTentativos.txt  Wins: pesos.txt           
+Depth: 5  Starts: pesos.txt            Wins: pesosTentativos.txt 
+Depth: 5  Starts: pesosTentativos.txt  Wins: pesosTentativos.txt 
+Depth: 6  Starts: pesos.txt            Wins: pesos.txt           
+Depth: 6  Starts: pesosTentativos.txt  Wins: Empate              
+Depth: 7  Starts: pesos.txt            Wins: pesos.txt           
+Depth: 7  Starts: pesosTentativos.txt  Wins: pesosTentativos.txt 
+Depth: 8  Starts: pesos.txt            Wins: Empate              
+Depth: 8  Starts: pesosTentativos.txt  Wins: Empate              
+Depth: 9  Starts: pesos.txt            Wins: Empate              
+Depth: 9  Starts: pesosTentativos.txt  Wins: pesosTentativos.txt 
